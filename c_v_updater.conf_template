@@ -1,0 +1,7 @@
+{
+	App => {
+		UA => '',
+		ClientID => '',
+		ClientSecret => ''
+	}
+};

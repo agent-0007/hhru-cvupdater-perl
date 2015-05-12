@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HH CV Updater</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap-table.min.css">
+	<link rel="stylesheet" href="css/bootstrap-switch.min.css">
+</head>
+<body>
+	<div id="wrap">
+		<div class="navbar navbar-default navbar-static-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header"><a class="navbar-brand">Список резюме</a></div>
+				<div class="navbar-collapse collapse">
+					<div class="navbar-right">
+						<a href="/resync" class="navbar-right"><button type="button" class="btn btn-default navbar-btn">Синхронизировать список с HH.ru</button></a>
+						<p class="navbar-text"><a href="#" class="navbar-link"><%= session('hh') %></a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container" style="margin-bottom:40px">
+			<table id="main" data-toolbar="#custom-toolbar" data-toggle="table" data-url="my.json" data-cache="false" data-search="true" data-height="300" data-sort-name="name" data-sort-order="asc" data-show-toggle="true" data-row-style="rowStyle">
+				<thead>
+					<tr>
+						<th data-field="title" data-halign="center" data-valign="middle" data-sortable="true">Название</th>
+						<th data-field="updated_at" data-valign="middle" data-halign="center" data-align="center" data-sortable="true">Последнее обновление</th>
+						<th data-field="last_update_text" data-valign="middle" data-halign="center" data-align="center">Статус обновления</th>
+						<th data-field="will_update" data-valign="middle" data-halign="center" data-align="center" data-formatter="willupdateFormatter" >Автоматическое обновление</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<div id="footer">
+			<div class="container" >
+				<p class="pull-left">© Andrey Tatarnikov &nbsp; - &nbsp; <a href="mailto:insane@mozgam.net">Написать отзыв</a>
+
+				</p>
+			</div>
+		</div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap-table.min.js"></script>
+	<script src="js/bootstrap-switch.min.js"></script>
+	<script src="js/updater.js"></script>
+</body>
+</html>

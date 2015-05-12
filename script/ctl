@@ -1,0 +1,44 @@
+#!/bin/sh
+
+case "$1" in
+	start)
+#		if [ -f hypnotoad.pid ]; then
+#			echo "hypnotoad is already started!" >&2
+#			exit 1
+#		else
+			/usr/local/bin/hypnotoad cvupdater
+#		fi
+	;;
+
+	stop)
+		if [ -f hypnotoad.pid ]; then
+			/usr/local/bin/hypnotoad -s cvupdater
+		else
+			echo "hypnotoad is not started!" >&2
+			exit 1
+		fi
+	;;
+
+	restart)
+		if [ -f hypnotoad.pid ]; then
+			/usr/local/bin/hypnotoad -s cvupdater
+			/usr/local/bin/hypnotoad cvupdater
+		else
+			echo "hypnotoad is not started!" >&2
+		fi
+	;;
+
+	status)
+		if [ -f hypnotoad.pid ]; then
+			echo "hypnotoad seems to be running"
+		else
+			echo "hypnotoad is not running"
+		fi		
+	;;
+	*)
+		echo "Usage: ctl.sh {start|stop|restart|status}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
