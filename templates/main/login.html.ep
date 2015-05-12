@@ -10,6 +10,9 @@
   </head>
   <body>
     <div class="container">
+    Робот для автоматического обновления даты публикации резюме на HH.ru.<br />
+    Для работы с роботом нужно нажать большую кнопку внизу и авторизоваться с помощью учетной записи на HH.ru<br />
+    Исходники на <a href="https://github.com/somepad/hhru-cvupdater-perl" target="_blank">GitHub</a>.
       <form class="form-signin">
         <a class="btn btn-lg btn-primary btn-block" href="/hhru">Вход через HH.ru</a>
       </form>
