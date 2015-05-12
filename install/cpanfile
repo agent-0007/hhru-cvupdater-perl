@@ -4,3 +4,4 @@ requires 'Data::Printer', '0.35';
 requires 'SQL::Translator', '0.11021';
 requires 'DateTime::Format::SQLite', '0.11';
 requires 'DateTime::Format::ISO8601', '0.08';
+requires 'IO::Socket::SSL', '1.94';
