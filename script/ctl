@@ -2,12 +2,7 @@
 
 case "$1" in
 	start)
-#		if [ -f hypnotoad.pid ]; then
-#			echo "hypnotoad is already started!" >&2
-#			exit 1
-#		else
-			/usr/local/bin/hypnotoad cvupdater
-#		fi
+		/usr/local/bin/hypnotoad cvupdater
 	;;
 
 	stop)

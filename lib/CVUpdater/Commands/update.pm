@@ -13,11 +13,6 @@ sub run {
 	while (my $user = $users->next) {
 		my $resumes = $user->resumes;
 		while (my $resume = $resumes->next) {
-			# my $api = $self->app->hhru('post', 'https://api.hh.ru/resumes/'.$resume->id.'/publish', $user->access_token, undef);
-			# my $result = $api->res->code == 429 ? "Время ожидания не вышло" : $api->res->code == 204 ? "Ок" : $api->res->code;
-			# $resume->last_update_int($api->res->code);
-			# $resume->last_update_text($result);
-			# $resume->update;
 			$self->app->cvupdate($user, $resume);
 		}
 		$self->app->cvresync($user);
