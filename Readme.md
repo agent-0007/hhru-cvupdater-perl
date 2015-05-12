@@ -17,6 +17,7 @@ Just Perl. At least version 5.14.2
 ## HH API Configuration
 1. Go to https://dev.hh.ru and register your application
 2. Edit _c_v_updater.conf_ file with your *Client ID* and *Client Secret*. You also may want to change default UserAgent (`UA` section).
+*Redirect URI* for your application must be like this: `http(s)://domain.tld/hhcb`
 
 ## Starting up
 1. First, you have to create new sqlite database for application. App can do it for you: `cd script && ./cvupdater deploy`
