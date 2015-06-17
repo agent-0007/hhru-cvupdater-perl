@@ -64,6 +64,8 @@ sub register {
 	$app->helper(cvresync => sub {
 		my ($self, $user) = @_;
 
+		my $existing = $self->db->resultset('Resume')->search({'user_id' => $user->mail})->delete_all;
+
 		my $resumes = $self->hhru('get', 'https://api.hh.ru/resumes/mine?per_page=1000', $user->access_token, undef)->res->json;
 
 		foreach my $resume (@{$resumes->{items}}) {
