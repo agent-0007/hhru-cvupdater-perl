@@ -6,6 +6,8 @@ use Modern::Perl;
 use Mojo::Log;
 use Data::Printer { multiline => 0 };
 use DateTime::Format::ISO8601;
+use List::Compare;
+use List::MoreUtils qw(uniq);
 use utf8;
 
 
@@ -64,23 +66,45 @@ sub register {
 	$app->helper(cvresync => sub {
 		my ($self, $user) = @_;
 
-		my $existing = $self->db->resultset('Resume')->search({'user_id' => $user->mail})->delete_all;
-
-		my $resumes = $self->hhru('get', 'https://api.hh.ru/resumes/mine?per_page=1000', $user->access_token, undef)->res->json;
-
-		foreach my $resume (@{$resumes->{items}}) {
-			next if $resume->{access}->{type}->{id} eq 'no_one';
-			next if $resume->{status}->{id} eq 'not_published';
-
-			$resume->{updated_at} =~ s/(.+)[+]\d{4}/$1/;
-			# $resume->{updated_at} =~ s/(.+)(\d{2})/$1:$2/;
-			$self->db->resultset('Resume')->update_or_create({
-				id => $resume->{id},
-				user_id => $user->mail,
-				title => $resume->{title},
-				updated_at => DateTime::Format::ISO8601->parse_datetime($resume->{updated_at})
-			});
+		# CVs in database
+		my @cvs_db;
+		foreach my $cv_db ($self->db->resultset('Resume')->search({'user_id' => $user->mail})->all) {
+			push @cvs_db, $cv_db->id;
 		}
+
+		# CVs in HH
+		my @cvs_hh;
+		my %cvs_hh_hash;
+		foreach my $cv_hh (@{$self->hhru('get', 'https://api.hh.ru/resumes/mine?per_page=1000', $user->access_token, undef)->res->json->{items}}) {
+			next if $cv_hh->{access}->{type}->{id} eq 'no_one';
+			next if $cv_hh->{status}->{id} eq 'not_published';
+
+			push @cvs_hh, $cv_hh->{id};
+			$cv_hh->{updated_at} =~ s/(.+)[+]\d{4}/$1/;
+			$cvs_hh_hash{$cv_hh->{id}} = {
+				id => $cv_hh->{id},
+				user_id => $user->mail,
+				title => $cv_hh->{title},
+				updated_at => DateTime::Format::ISO8601->parse_datetime($cv_hh->{updated_at})
+			};
+		}
+
+		# CVs comparsion
+		my $lc = List::Compare->new(\@cvs_db, \@cvs_hh);
+		my @cvs_everywhere = $lc->get_intersection;
+		my @cvs_only_db = $lc->get_Lonly;
+		my @cvs_only_hh = $lc->get_Ronly;
+
+		# delete CVs which presented only in DB
+		foreach my $deletion (@cvs_only_db) {
+			$self->db->resultset('Resume')->search({'id' => $deletion})->delete;
+		}
+
+		# update CVs
+		foreach my $cv (my @arr = uniq @cvs_everywhere, @cvs_hh) {
+			$self->db->resultset('Resume')->update_or_create(%{$cvs_hh_hash{$cv}});
+		}
+
 	});
 }
 

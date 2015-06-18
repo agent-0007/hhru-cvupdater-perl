@@ -33,6 +33,16 @@ sub register {
 			return '['.$client{ip}.'] ['.$client{email}.']';
 	});
 
+	$app->helper(
+		ListUniq => sub {
+			my $self = shift;
+			my @A = shift;
+			my @B = shift;
+			my %seen;
+			my @out = grep( !$seen{$_}++, @A, @B);
+			return @out;
+	});
+
 	# Logging facility
 	$app->helper(
 		_log => sub {
