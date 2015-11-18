@@ -12,8 +12,8 @@ has schema => sub {
 sub startup {
 	my $self = shift;
 	
-	$self->config(hypnotoad => {listen => ['http://127.0.0.1:{{ mojo_port }}'], heartbeat_timeout => 60});
-	$self->secrets(['{{ mojo_secret }}']);
+	$self->config(hypnotoad => {listen => ['http://127.0.0.1:#mojo_port#'], heartbeat_timeout => 60});
+	$self->secrets(['#mojo_secret#']);
 
 	push @{$self->commands->namespaces}, 'CVUpdater::Commands';
 	$self->helper(db => sub { $self->app->schema });
